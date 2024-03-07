@@ -1,37 +1,34 @@
 const MARGIN = 20;
-const ITEM_SIZE = 20;
+const ITEM_SIZE = 40;
 const win_w = window.innerWidth;
 const win_h = window.innerHeight;
+let width = win_w - 2 * MARGIN;
+let height = win_h - 2 * MARGIN;
 
-function get_rows_cols(width, height, margin, size) {
-    console.log(width, height, margin, size);
-    const rows = Math.floor((height - 2 * margin) / size);
-    const cols = Math.floor((width - 2 * margin) / size);
+function get_rows_cols(width, height, size) {
+    console.log(width, height, size);
+    const rows = Math.floor(height / size);
+    const cols = Math.floor(width / size);
     console.log("r:", rows, "c:", cols);
     return [rows, cols];
 }
 
-function get_x_y(width, heigth, rows, cols, size) {
-    const x = Math.floor((width - (cols * size)) / 2);
-    const y = Math.floor((heigth - (rows * size)) / 2);
-    return [x, y];
-}
-
-let rows, cols, x, y;
-[rows, cols] = get_rows_cols(win_w, win_h, MARGIN, ITEM_SIZE);
-[x, y] = get_x_y(win_w, win_h, rows, cols, ITEM_SIZE);
-
+let rows, cols;
+[rows, cols] = get_rows_cols(width, height, ITEM_SIZE);
+console.log("r,c:", rows, cols);
+width = ITEM_SIZE * cols;
+height = ITEM_SIZE * rows;
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 console.log(canvas);
 console.log(ctx);
 
-canvas.width = win_w;
-canvas.height = win_h;
+canvas.width = width;
+canvas.height = height;
 
-console.log("width:", win_w);
-console.log("height:", win_h);
+console.log("width:", width);
+console.log("height:", height);
 
 const maze = {
 
@@ -48,10 +45,14 @@ function draw() {
             let g = Math.floor(Math.random() * 256);
             let b = Math.floor(Math.random() * 256);
             ctx.fillStyle = `rgb(${r} ${g} ${b})`;
-            ctx.fillRect(x + col * ITEM_SIZE, y + row * ITEM_SIZE, ITEM_SIZE, ITEM_SIZE);
+            ctx.fillRect(col * ITEM_SIZE, row * ITEM_SIZE, ITEM_SIZE, ITEM_SIZE);
         }
     }
 }
 
+function start() {
+    setInterval(draw, 50);
+}
+
 ctx.fillStyle = "rgb(200 0 0)";
-window.addEventListener("load", draw);
+window.addEventListener("load", start);
